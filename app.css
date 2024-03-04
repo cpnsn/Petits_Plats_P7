@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.card {
+    width: 25%;
+    margin: 2rem;
+}
+
+.card-image {
+    height: 300px;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 21px 21px 0px 0px;
+}
+
+.card-content {
+    padding: 2rem 1.5rem;
+    background-color: #ffffff;
+    border-radius: 0px 0px 21px 21px;
+}
+
+.card-content h2 {
+    font-family: "Anton", sans-serif;
+}
+
+.card-content h3 {
+    font-family: "Manrope", sans-serif;
+    font-weight: 700;
+    color: #7A7A7A;
+    margin: 1rem 0;
+}
+
+.card-content p {
+    font-family: "Manrope", sans-serif;
+}
+
+.recette {
+    height: 100px;
+    overflow: scroll;
+}
+
+.ingredients {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.ingredient {
+    width: 50%;
+    margin-bottom: 1rem;
+}
+
+.quantity {
+    color: #7A7A7A;
+}

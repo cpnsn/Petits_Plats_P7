@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <link href="output.css" rel="stylesheet" type="text/css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto:wght@100&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Les petits plats</title>
+</head>
+<body>
+    <header>
+        <img src="assets/images/header.jpeg" alt="header backgorund image"/>
+        <div class="absolute top-10 left-10 flex">
+            <img class="mr-2" src="assets/logo.svg" alt="logo"/>
+            <img src="assets/icons/icon_logo.svg" alt="icon"/>
+        </div>
+        <!-- <div class="absolute top-[20%] lg:top-[30%] left-[50%] translate-x-[-50%] flex flex-col w-full"> -->
+        <div class="absolute top-[20%] lg:top-[30%] flex flex-col w-full">
+            <h1 class="text-yellow font-anton text-3xl lg:text-5xl text-center">CHERCHEZ PARMI PLUS DE 1500 RECETTES <br> DU QUOTIDIEN,SIMPLES ET DÉLICIEUSES</h1>
+            <form class="text-center bg-white mt-8 flex justify-between p-2 lg:p-3 rounded-md w-[80%] mx-auto 2xl:w-[60%]">
+                <input class="w-[80%] outline-none" type="search" id="search" name="search" placeholder="Rechercher une recette, un ingrédient..."/>
+                <button class="bg-black p-2 rounded-md"><img src="assets/icons/search.svg"/></button>
+            </form>
+        </div>
+    </header>
+    <main class="bg-main-bg">
+        <div class="container mx-auto">
+            <div class="flex p-12">
+                <div class="p-4 bg-white rounded-[11px] flex mr-12">
+                    Ingrédients
+                    <img class="ml-12" src="assets/icons/arrow_down.svg" alt="icon"/>
+                </div>
+                <div class="p-4 bg-white rounded-[11px] flex mr-12">
+                    Appareils
+                    <img class="ml-12" src="assets/icons/arrow_down.svg" alt="icon"/>
+                </div>
+                <div class="p-4 bg-white rounded-[11px] flex">
+                    Ustensiles
+                    <img class="ml-12" src="assets/icons/arrow_down.svg" alt="icon"/>
+                </div>
+            </div>
+        </div>
+        
+        <div class="flex flex-wrap justify-center" id="recipes"></div>
+    </main>
+<script src="index.js"></script>    
+</body>
+</html>
