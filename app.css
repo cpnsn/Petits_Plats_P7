@@ -5,6 +5,7 @@
 .card {
     width: 25%;
     margin: 2rem;
+    position: relative;
 }
 
 .card-image {
@@ -12,6 +13,16 @@
     width: 100%;
     object-fit: cover;
     border-radius: 21px 21px 0px 0px;
+}
+
+.time {
+    background-color: #FFD15B;
+    position: absolute; 
+    top: 1rem;
+    right: 1rem;
+    font-size: 12px;
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
 }
 
 .card-content {
@@ -43,6 +54,7 @@
 .ingredients {
     display: flex;
     flex-wrap: wrap;
+    min-height: 200px;
 }
 
 .ingredient {

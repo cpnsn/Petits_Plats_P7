@@ -14,7 +14,6 @@ recipesCountP.style.fontSize = '21px';
 recipesCountP.style.fontFamily = 'Anton';
 recipesCountP.style.textAlign = 'right';
 recipesCountP.style.marginRight = '2rem';
-const tagsDiv = document.getElementById('tags');
 const container = document.querySelector('.container');
 container.appendChild(recipesCountP);
 
@@ -25,11 +24,11 @@ async function createCard() {
     const searchInput = document.getElementById('search').value.toLowerCase();
     let recipesCount = 0;
 
-    recipes.forEach(recipe => {
+    for (let i = 0; i < recipes.length; i++) {
         if (
-            recipe.name.toLowerCase().includes(searchInput) ||
-            recipe.description.toLowerCase().includes(searchInput) ||
-            recipe.ingredients.some(ingredient => ingredient.ingredient.toLowerCase().includes(searchInput))
+            recipes[i].name.toLowerCase().includes(searchInput) ||
+            recipes[i].description.toLowerCase().includes(searchInput) ||
+            recipes[i].ingredients.some(ingredient => ingredient.ingredient.toLowerCase().includes(searchInput))
         ) {
             recipesCount++;
 
@@ -38,18 +37,18 @@ async function createCard() {
             
             const cardImage = document.createElement('img');
             cardImage.classList.add('card-image');
-            cardImage.setAttribute('src', `assets/images/plats/${recipe.image}`);
-            cardImage.setAttribute('alt', recipe.name);
+            cardImage.setAttribute('src', `assets/images/plats/${recipes[i].image}`);
+            cardImage.setAttribute('alt', recipes[i].name);
 
             const time = document.createElement('p');
             time.classList.add('time');
-            time.textContent = `${recipe.time}min`;
+            time.textContent = `${recipes[i].time}min`;
 
             const cardContent = document.createElement('div');
             cardContent.classList.add('card-content');
             
             const cardTitle = document.createElement('h2');
-            cardTitle.textContent = recipe.name;
+            cardTitle.textContent = recipes[i].name;
 
             const cardSection = document.createElement('h3');
             cardSection.textContent = "RECETTE";
@@ -58,7 +57,7 @@ async function createCard() {
             recetteDiv.classList.add('recette');
 
             const recette = document.createElement('p');
-            recette.textContent = recipe.description;
+            recette.textContent = recipes[i].description;
 
             const cardSection2 = document.createElement('h3');
             cardSection2.textContent = "INGRÉDIENTS";
@@ -66,7 +65,7 @@ async function createCard() {
             const ingredientsDiv = document.createElement('div');
             ingredientsDiv.classList.add('ingredients');
             
-            recipe.ingredients.forEach(ingredient => {
+            recipes[i].ingredients.forEach(ingredient => {
                 const ingredientDiv = document.createElement('div');
                 ingredientDiv.classList.add('ingredient');
 
@@ -97,45 +96,8 @@ async function createCard() {
             recipesDiv.appendChild(card);
         }
         recipesCountP.textContent = `${recipesCount} recettes`;
-    });
+    };
 }
-
-    const ingredientsBtn = document.getElementById('ingredients-btn');
-    const ingredientsDropdown = document.getElementById('ingredients-dropdown');
-    const ingedientsDropdownBtn = document.getElementById('ingredients-dropdown-btn');
-    ingredientsBtn.addEventListener('click', () => {
-        ingredientsBtn.style.display = 'none';
-        ingredientsDropdown.style.display = 'block'
-    })
-    ingedientsDropdownBtn.addEventListener('click', () => {
-        ingredientsBtn.style.display = 'flex';
-        ingredientsDropdown.style.display = 'none'
-    })
-
-
-async function handleIngredientsTags() {
-    const recipes = await getRecipes();
-    const searchInput = document.getElementById('search-ingredients').value.toLowerCase();
-    const ingredients = document.getElementById('ingredients');
-    ingredients.innerHTML = '';
-
-    const uniqueIngredients = [];
-
-    recipes.forEach(recipe => {
-        recipe.ingredients.forEach(ingredient => {
-            if ((ingredient.ingredient.toLowerCase().includes(searchInput)) && (!uniqueIngredients.includes(ingredient.ingredient.toLowerCase()))) {
-                const ingredientName = document.createElement('p');
-                ingredientName.textContent = ingredient.ingredient;
-                ingredients.appendChild(ingredientName);
-                uniqueIngredients.push(ingredient.ingredient.toLowerCase());
-            }
-        });
-    });
-}
-
-handleIngredientsTags();
-document.getElementById('search-ingredients').addEventListener('input', handleIngredientsTags);
-
 
 document.getElementById('search').addEventListener('input', createCard);
 

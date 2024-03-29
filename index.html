@@ -27,17 +27,29 @@
         </div>
     </header>
     <main class="bg-main-bg">
-        <div class="container mx-auto">
-            <div class="flex p-12">
-                <div class="p-4 bg-white rounded-[11px] flex mr-12">
+        <div class="container flex justify-between items-center mx-auto">
+            <div class="flex  p-12">
+                <button id="ingredients-btn" class="p-4 bg-white rounded-[11px] flex items-center mr-12 h-fit">
                     Ingrédients
                     <img class="ml-12" src="assets/icons/arrow_down.svg" alt="icon"/>
+                </button>
+
+                <div id="ingredients-dropdown" class="w-fit bg-white mr-12 rounded-[11px] p-4 hidden">
+                    <button id="ingredients-dropdown-btn" class="flex items-center justify-between w-full">
+                        Ingrédients
+                        <img class="ml-12" src="assets/icons/arrow_up.svg" alt="icon"/>
+                    </button>
+                    <!-- <div class=""> -->
+                        <input class="outline-none border border-[#C6C6C6] rounded-[2px] mt-3 mb-4" type="search" id="search-ingredients" name="search-ingredients"/>
+                    <!-- </div> -->
+                    <div class="h-[200px] overflow-scroll" id="ingredients"></div>
                 </div>
-                <div class="p-4 bg-white rounded-[11px] flex mr-12">
+
+                <div class="p-4 bg-white rounded-[11px] flex items-center mr-12 h-fit">
                     Appareils
                     <img class="ml-12" src="assets/icons/arrow_down.svg" alt="icon"/>
                 </div>
-                <div class="p-4 bg-white rounded-[11px] flex">
+                <div class="p-4 bg-white rounded-[11px] flex items-center h-fit">
                     Ustensiles
                     <img class="ml-12" src="assets/icons/arrow_down.svg" alt="icon"/>
                 </div>
@@ -47,5 +59,6 @@
         <div class="flex flex-wrap justify-center" id="recipes"></div>
     </main>
 <script src="index.js"></script>    
+<!-- <script src="index2.js"></script> -->
 </body>
 </html>
