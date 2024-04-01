@@ -113,17 +113,25 @@ async function createCard() {
     })
 
 
-async function handleIngredientsTags() {
+async function handleIngredientsTags(searchInput) {
     const recipes = await getRecipes();
-    const searchInput = document.getElementById('search-ingredients').value.toLowerCase();
+    const searchTagsInput = document.getElementById('search-ingredients').value.toLowerCase();
     const ingredients = document.getElementById('ingredients');
     ingredients.innerHTML = '';
 
+    const filteredRecipes = recipes.filter(recipe => {
+        return (
+            recipe.name.toLowerCase().includes(searchInput) ||
+            recipe.description.toLowerCase().includes(searchInput) ||
+            recipe.ingredients.some(ingredient => ingredient.ingredient.toLowerCase().includes(searchInput))
+        );
+    });
+
     const uniqueIngredients = [];
 
-    recipes.forEach(recipe => {
+    filteredRecipes.forEach(recipe => {
         recipe.ingredients.forEach(ingredient => {
-            if ((ingredient.ingredient.toLowerCase().includes(searchInput)) && (!uniqueIngredients.includes(ingredient.ingredient.toLowerCase()))) {
+            if ((ingredient.ingredient.toLowerCase().includes(searchTagsInput)) && (!uniqueIngredients.includes(ingredient.ingredient.toLowerCase()))) {
                 const ingredientName = document.createElement('p');
                 ingredientName.textContent = ingredient.ingredient;
                 ingredients.appendChild(ingredientName);
@@ -133,11 +141,19 @@ async function handleIngredientsTags() {
     });
 }
 
-handleIngredientsTags();
-document.getElementById('search-ingredients').addEventListener('input', handleIngredientsTags);
+const defaultSearchInput = document.getElementById('search').value.toLowerCase();
+handleIngredientsTags(defaultSearchInput);
 
+document.getElementById('search-ingredients').addEventListener('input', async () => {
+    const searchInput = document.getElementById('search').value.toLowerCase();
+    await handleIngredientsTags(searchInput);
+});
 
-document.getElementById('search').addEventListener('input', createCard);
+document.getElementById('search').addEventListener('input', async () => {
+    const searchInput = document.getElementById('search').value.toLowerCase();
+    await handleIngredientsTags(searchInput);
+    createCard();
+});
 
 if(document.getElementById('search').value.toLowerCase().length >= 3) {
     createCard();

@@ -65,3 +65,12 @@
 .quantity {
     color: #7A7A7A;
 }
+
+#ingredients p {
+    padding: 0.5rem 1rem;
+} 
+
+#ingredients p:hover {
+    background-color: #FFD15B;
+    cursor: pointer;
+} 
