@@ -28,13 +28,13 @@
     </header>
     <main class="bg-main-bg">
         <div class="container flex justify-between items-center mx-auto">
-            <div class="flex  p-12">
-                <button id="ingredients-btn" class="p-4 bg-white rounded-[11px] flex items-center mr-12 h-fit">
+            <div class="flex p-12">
+                <button id="ingredients-btn" class="p-4 bg-white rounded-[11px] flex items-center justify-between mr-12 h-fit w-[210px]">
                     Ingrédients
                     <img class="ml-12" src="assets/icons/arrow_down.svg" alt="icon"/>
                 </button>
 
-                <div id="ingredients-dropdown" class="w-fit bg-white mr-12 rounded-[11px] hidden">
+                <div id="ingredients-dropdown" class="w-[210px] bg-white mr-12 rounded-[11px] hidden absolute z-[1]">
                     <button id="ingredients-dropdown-btn" class="flex items-center justify-between w-full pt-4 px-4">
                         Ingrédients
                         <img class="ml-12" src="assets/icons/arrow_up.svg" alt="icon"/>
@@ -59,6 +59,5 @@
         <div class="flex flex-wrap justify-center" id="recipes"></div>
     </main>
 <script src="index.js"></script>    
-<!-- <script src="index2.js"></script> -->
 </body>
 </html>

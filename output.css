@@ -677,6 +677,10 @@ video {
   isolation: auto;
 }
 
+.z-\[1\] {
+  z-index: 1;
+}
+
 .float-start {
   float: inline-start;
 }
@@ -867,6 +871,10 @@ video {
   height: fit-content;
 }
 
+.w-\[210px\] {
+  width: 210px;
+}
+
 .w-\[80\%\] {
   width: 80%;
 }
@@ -881,11 +889,6 @@ video {
 
 .w-\[weird-and-invalid\] {
   width: weird-and-invalid;
-}
-
-.w-fit {
-  width: -moz-fit-content;
-  width: fit-content;
 }
 
 .w-full {
@@ -2497,6 +2500,13 @@ video {
 
 .forced-color-adjust-none {
   forced-color-adjust: none;
+}
+
+.recipes-count {
+  font-size: 21px;
+  font-family: "Anton", sans-serif;
+  text-align: right;
+  margin-right: 2rem;
 }
 
 .card {

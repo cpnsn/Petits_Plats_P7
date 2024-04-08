@@ -9,154 +9,221 @@ async function getRecipes() {
     }
 }
 
+// RECIPES COUNT PARAGRAPH
 const recipesCountP = document.createElement('p');
-recipesCountP.style.fontSize = '21px';
-recipesCountP.style.fontFamily = 'Anton';
-recipesCountP.style.textAlign = 'right';
-recipesCountP.style.marginRight = '2rem';
+recipesCountP.classList.add('recipes-count');
 const tagsDiv = document.getElementById('tags');
 const container = document.querySelector('.container');
 container.appendChild(recipesCountP);
 
-async function createCard() {
+// TOGGLE VISIBILITY OF INGREDIENTS TAGS
+const ingredientsBtn = document.getElementById('ingredients-btn');
+const ingredientsDropdown = document.getElementById('ingredients-dropdown');
+const ingedientsDropdownBtn = document.getElementById('ingredients-dropdown-btn');
+ingredientsBtn.addEventListener('click', () => {
+    ingredientsDropdown.style.display = 'block'
+})
+ingedientsDropdownBtn.addEventListener('click', () => {
+    ingredientsBtn.style.display = 'flex';
+    ingredientsDropdown.style.display = 'none'
+})
+
+// CREATE CARD
+async function createCard(recipe, recipesDiv) {
+    const card = document.createElement('div');
+    card.classList.add('card');
+            
+    const cardImage = document.createElement('img');
+    cardImage.classList.add('card-image');
+    cardImage.setAttribute('src', `assets/images/plats/${recipe.image}`);
+    cardImage.setAttribute('alt', recipe.name);
+
+    const time = document.createElement('p');
+    time.classList.add('time');
+    time.textContent = `${recipe.time}min`;
+
+    const cardContent = document.createElement('div');
+    cardContent.classList.add('card-content');
+            
+    const cardTitle = document.createElement('h2');
+    cardTitle.textContent = recipe.name;
+
+    const cardSection = document.createElement('h3');
+    cardSection.textContent = "RECETTE";
+
+    const recetteDiv = document.createElement('div');
+    recetteDiv.classList.add('recette');
+
+    const recette = document.createElement('p');
+    recette.textContent = recipe.description;
+
+    const cardSection2 = document.createElement('h3');
+    cardSection2.textContent = "INGRÉDIENTS";
+
+    const ingredientsDiv = document.createElement('div');
+    ingredientsDiv.classList.add('ingredients');
+            
+    recipe.ingredients.forEach(ingredient => {
+        const ingredientDiv = document.createElement('div');
+        ingredientDiv.classList.add('ingredient');
+
+        const ingredientName = document.createElement('p');
+        ingredientName.textContent = ingredient.ingredient;
+
+        const ingredientQty = document.createElement('p');
+        ingredientQty.textContent = ingredient.quantity;
+        ingredientQty.classList.add('quantity');
+
+        ingredientDiv.appendChild(ingredientName);
+        ingredientDiv.appendChild(ingredientQty);
+        ingredientsDiv.appendChild(ingredientDiv);
+    });
+            
+    cardContent.appendChild(cardTitle);
+    cardContent.appendChild(cardSection);
+    cardContent.appendChild(recetteDiv);
+    cardContent.appendChild(cardSection2);
+    cardContent.appendChild(ingredientsDiv);
+
+    recetteDiv.appendChild(recette);
+
+    card.appendChild(time);
+    card.appendChild(cardImage);
+    card.appendChild(cardContent);
+
+    recipesDiv.appendChild(card);
+}
+
+///////////////    ///////////////    ///////////////    ///////////////
+
+const searchInput = document.getElementById('search');
+const searchIngredientsInput = document.getElementById('search-ingredients');
+const ingredients = document.getElementById('ingredients');
+const ingredientTags = document.querySelectorAll('.ingredient-tag');
+
+// UPDATE RECIPES COUNT
+function updateRecipesCount(count) {
+    recipesCountP.textContent = `${count} recettes`;
+}
+
+// DISPLAY ALL RECIPES
+async function displayAllCards() {
     const recipes = await getRecipes();
     const recipesDiv = document.getElementById('recipes');
     recipesDiv.innerHTML = '';
-    const searchInput = document.getElementById('search').value.toLowerCase();
     let recipesCount = 0;
 
     recipes.forEach(recipe => {
-        if (
-            recipe.name.toLowerCase().includes(searchInput) ||
-            recipe.description.toLowerCase().includes(searchInput) ||
-            recipe.ingredients.some(ingredient => ingredient.ingredient.toLowerCase().includes(searchInput))
-        ) {
-            recipesCount++;
-
-            const card = document.createElement('div');
-            card.classList.add('card');
-            
-            const cardImage = document.createElement('img');
-            cardImage.classList.add('card-image');
-            cardImage.setAttribute('src', `assets/images/plats/${recipe.image}`);
-            cardImage.setAttribute('alt', recipe.name);
-
-            const time = document.createElement('p');
-            time.classList.add('time');
-            time.textContent = `${recipe.time}min`;
-
-            const cardContent = document.createElement('div');
-            cardContent.classList.add('card-content');
-            
-            const cardTitle = document.createElement('h2');
-            cardTitle.textContent = recipe.name;
-
-            const cardSection = document.createElement('h3');
-            cardSection.textContent = "RECETTE";
-
-            const recetteDiv = document.createElement('div');
-            recetteDiv.classList.add('recette');
-
-            const recette = document.createElement('p');
-            recette.textContent = recipe.description;
-
-            const cardSection2 = document.createElement('h3');
-            cardSection2.textContent = "INGRÉDIENTS";
-
-            const ingredientsDiv = document.createElement('div');
-            ingredientsDiv.classList.add('ingredients');
-            
-            recipe.ingredients.forEach(ingredient => {
-                const ingredientDiv = document.createElement('div');
-                ingredientDiv.classList.add('ingredient');
-
-                const ingredientName = document.createElement('p');
-                ingredientName.textContent = ingredient.ingredient;
-
-                const ingredientQty = document.createElement('p');
-                ingredientQty.textContent = ingredient.quantity;
-                ingredientQty.classList.add('quantity');
-
-                ingredientDiv.appendChild(ingredientName);
-                ingredientDiv.appendChild(ingredientQty);
-                ingredientsDiv.appendChild(ingredientDiv);
-            });
-            
-            cardContent.appendChild(cardTitle);
-            cardContent.appendChild(cardSection);
-            cardContent.appendChild(recetteDiv);
-            cardContent.appendChild(cardSection2);
-            cardContent.appendChild(ingredientsDiv);
-
-            recetteDiv.appendChild(recette);
-
-            card.appendChild(time);
-            card.appendChild(cardImage);
-            card.appendChild(cardContent);
-
-            recipesDiv.appendChild(card);
-        }
-        recipesCountP.textContent = `${recipesCount} recettes`;
-    });
+        recipesCount++;
+        createCard(recipe, recipesDiv)
+    })
+    updateRecipesCount(recipesCount);
+    displayIngredientsTags();
 }
 
-    const ingredientsBtn = document.getElementById('ingredients-btn');
-    const ingredientsDropdown = document.getElementById('ingredients-dropdown');
-    const ingedientsDropdownBtn = document.getElementById('ingredients-dropdown-btn');
-    ingredientsBtn.addEventListener('click', () => {
-        ingredientsBtn.style.display = 'none';
-        ingredientsDropdown.style.display = 'block'
-    })
-    ingedientsDropdownBtn.addEventListener('click', () => {
-        ingredientsBtn.style.display = 'flex';
-        ingredientsDropdown.style.display = 'none'
-    })
-
-
-async function handleIngredientsTags(searchInput) {
+// RECIPES FILTERED BY SEARCH
+async function displayCardsBySearch() {
     const recipes = await getRecipes();
-    const searchTagsInput = document.getElementById('search-ingredients').value.toLowerCase();
-    const ingredients = document.getElementById('ingredients');
-    ingredients.innerHTML = '';
+    const recipesDiv = document.getElementById('recipes');
+    recipesDiv.innerHTML = '';
+    let recipesCount = 0;
+    const searchInputValue = searchInput.value.toLowerCase();
 
-    const filteredRecipes = recipes.filter(recipe => {
-        return (
-            recipe.name.toLowerCase().includes(searchInput) ||
-            recipe.description.toLowerCase().includes(searchInput) ||
-            recipe.ingredients.some(ingredient => ingredient.ingredient.toLowerCase().includes(searchInput))
-        );
+    recipes.forEach(recipe => {
+        if (
+            recipe.name.toLowerCase().includes(searchInputValue) ||
+            recipe.description.toLowerCase().includes(searchInputValue) ||
+            recipe.ingredients.some(ingredient => ingredient.ingredient.toLowerCase().includes(searchInputValue))
+        ) {
+            recipesCount++;
+            createCard(recipe, recipesDiv)
+        }
     });
+    updateRecipesCount(recipesCount);
+    displayIngredientsTags();
+}
 
-    const uniqueIngredients = [];
+// DISPLAY INGREDIENTS TAGS
+async function displayIngredientsTags() {
+    const recipes = await getRecipes();
+    const searchInputValue = searchInput.value.toLowerCase();
+    ingredients.innerHTML = '';
+    let uniqueIngredients = [];
+
+    let filteredRecipes = recipes;
+
+    if (searchInputValue !== '') {
+        filteredRecipes = recipes.filter(recipe => {
+            return (
+                recipe.name.toLowerCase().includes(searchInputValue) ||
+                recipe.description.toLowerCase().includes(searchInputValue) ||
+                recipe.ingredients.some(ingredient => ingredient.ingredient.toLowerCase().includes(searchInputValue))
+            );
+        });
+    }
 
     filteredRecipes.forEach(recipe => {
         recipe.ingredients.forEach(ingredient => {
-            if ((ingredient.ingredient.toLowerCase().includes(searchTagsInput)) && (!uniqueIngredients.includes(ingredient.ingredient.toLowerCase()))) {
-                const ingredientName = document.createElement('p');
-                ingredientName.textContent = ingredient.ingredient;
-                ingredients.appendChild(ingredientName);
+            if ((ingredient.ingredient.toLowerCase().includes(searchIngredientsInput.value.toLowerCase())) && (!uniqueIngredients.includes(ingredient.ingredient.toLowerCase()))) {
+                const ingredientTag = document.createElement('p');
+                ingredientTag.textContent = ingredient.ingredient;
+                ingredientTag.classList.add('ingredient-tag');
+
+                ingredientTag.addEventListener('click', () => {
+                    if (!selectedIngredients.includes(ingredient.ingredient.toLowerCase())) {
+                        selectedIngredients = [...selectedIngredients, ingredient.ingredient.toLowerCase()];
+                        ingredients.prepend(ingredientTag);
+                        ingredientTag.style.backgroundColor = '#FFD15B';
+                    } else {
+                        selectedIngredients = selectedIngredients.filter(item => item !== ingredient.ingredient.toLowerCase());
+                        ingredientTag.remove();
+                        ingredientTag.style.backgroundColor = ''; 
+                    }
+                    displayCardsByIngredientTags();
+                });
+                
+                
+                ingredients.appendChild(ingredientTag);
                 uniqueIngredients.push(ingredient.ingredient.toLowerCase());
             }
         });
     });
 }
 
-const defaultSearchInput = document.getElementById('search').value.toLowerCase();
-handleIngredientsTags(defaultSearchInput);
+let selectedIngredients = [];
 
-document.getElementById('search-ingredients').addEventListener('input', async () => {
-    const searchInput = document.getElementById('search').value.toLowerCase();
-    await handleIngredientsTags(searchInput);
+// RECIPES FILTERED BY INGREDIENTS TAGS
+async function displayCardsByIngredientTags() {
+    const recipes = await getRecipes();
+    const recipesDiv = document.getElementById('recipes');
+    recipesDiv.innerHTML = '';
+    let recipesCount = 0;
+    
+    recipes.forEach(recipe => {
+        if (selectedIngredients.every(selectedIngredient => recipe.ingredients.some(ingredient => ingredient.ingredient.toLowerCase() === selectedIngredient))) {
+            recipesCount++;
+            createCard(recipe, recipesDiv);
+        }
+    });
+    updateRecipesCount(recipesCount);
+    displayIngredientsTags()
+} 
+
+// EVENT LISTENERS
+searchInput.addEventListener('input', () => {
+    if (searchInput.value.toLowerCase().length >= 3) {
+        displayCardsBySearch();
+    } else {
+        displayAllCards()
+        displayIngredientsTags();
+    }
+    displayIngredientsTags();
 });
 
-document.getElementById('search').addEventListener('input', async () => {
-    const searchInput = document.getElementById('search').value.toLowerCase();
-    await handleIngredientsTags(searchInput);
-    createCard();
-});
+searchIngredientsInput.addEventListener('input', () => {
+    displayIngredientsTags()
+})
 
-if(document.getElementById('search').value.toLowerCase().length >= 3) {
-    createCard();
-} else {
-createCard()
-}
+
+displayIngredientsTags()
+displayAllCards();
