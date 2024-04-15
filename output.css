@@ -2576,6 +2576,9 @@ video {
 
 #ingredients p {
   padding: 0.5rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1px;
 }
 
 #ingredients p:hover {

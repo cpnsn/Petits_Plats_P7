@@ -94,7 +94,7 @@ async function createCard(recipe, recipesDiv) {
     recipesDiv.appendChild(card);
 }
 
-///////////////    ///////////////    ///////////////    ///////////////
+
 
 const searchInput = document.getElementById('search');
 const searchIngredientsInput = document.getElementById('search-ingredients');
@@ -143,6 +143,27 @@ async function displayCardsBySearch() {
     displayIngredientsTags();
 }
 
+function createIngredientTag(ingredient) {
+    const capitalizedIngredient = ingredient.charAt(0).toUpperCase() + ingredient.slice(1);
+
+    const ingredientTag = document.createElement('p');
+    ingredientTag.textContent = capitalizedIngredient;
+    ingredientTag.classList.add('ingredient-tag');
+
+    ingredientTag.addEventListener('click', () => {
+        const index = selectedIngredients.indexOf(ingredient.toLowerCase());
+        if (index === -1) {
+            selectedIngredients.push(ingredient.toLowerCase());
+        } else {
+            selectedIngredients.splice(index, 1);
+        }
+        displayCardsByIngredientTags();
+        displayIngredientsTags();     
+    });
+
+    return ingredientTag;
+}
+
 // DISPLAY INGREDIENTS TAGS
 async function displayIngredientsTags() {
     const recipes = await getRecipes();
@@ -152,7 +173,13 @@ async function displayIngredientsTags() {
 
     let filteredRecipes = recipes;
 
-    if (searchInputValue !== '') {
+    if (selectedIngredients.length > 0) {
+        filteredRecipes = recipes.filter(recipe => {
+            return selectedIngredients.every(selectedIngredient =>
+                recipe.ingredients.some(ingredient => ingredient.ingredient.toLowerCase() === selectedIngredient)
+                );
+            });
+    } else if (searchInputValue !== '') {
         filteredRecipes = recipes.filter(recipe => {
             return (
                 recipe.name.toLowerCase().includes(searchInputValue) ||
@@ -162,27 +189,30 @@ async function displayIngredientsTags() {
         });
     }
 
+    selectedIngredients.forEach(selectedIngredient => {
+        const selectedTag = createIngredientTag(selectedIngredient);
+
+        ingredients.appendChild(selectedTag);
+        selectedTag.style.backgroundColor = '#FFD15B';
+        uniqueIngredients.push(selectedIngredient);
+
+        selectedTag.addEventListener('mouseenter', () => {
+            const closeIcon = document.createElement('img');
+            closeIcon.setAttribute('src', 'assets/icons/close.svg');
+            selectedTag.appendChild(closeIcon);
+            selectedTag.style.fontWeight = '500';
+
+            selectedTag.addEventListener('mouseleave', () => {
+                selectedTag.removeChild(closeIcon);
+                selectedTag.style.fontWeight = 'normal';
+            });
+        })
+    });
+
     filteredRecipes.forEach(recipe => {
         recipe.ingredients.forEach(ingredient => {
             if ((ingredient.ingredient.toLowerCase().includes(searchIngredientsInput.value.toLowerCase())) && (!uniqueIngredients.includes(ingredient.ingredient.toLowerCase()))) {
-                const ingredientTag = document.createElement('p');
-                ingredientTag.textContent = ingredient.ingredient;
-                ingredientTag.classList.add('ingredient-tag');
-
-                ingredientTag.addEventListener('click', () => {
-                    if (!selectedIngredients.includes(ingredient.ingredient.toLowerCase())) {
-                        selectedIngredients = [...selectedIngredients, ingredient.ingredient.toLowerCase()];
-                        ingredients.prepend(ingredientTag);
-                        ingredientTag.style.backgroundColor = '#FFD15B';
-                    } else {
-                        selectedIngredients = selectedIngredients.filter(item => item !== ingredient.ingredient.toLowerCase());
-                        ingredientTag.remove();
-                        ingredientTag.style.backgroundColor = ''; 
-                    }
-                    displayCardsByIngredientTags();
-                });
-                
-                
+                const ingredientTag = createIngredientTag(ingredient.ingredient);
                 ingredients.appendChild(ingredientTag);
                 uniqueIngredients.push(ingredient.ingredient.toLowerCase());
             }
@@ -206,7 +236,6 @@ async function displayCardsByIngredientTags() {
         }
     });
     updateRecipesCount(recipesCount);
-    displayIngredientsTags()
 } 
 
 // EVENT LISTENERS
@@ -215,15 +244,11 @@ searchInput.addEventListener('input', () => {
         displayCardsBySearch();
     } else {
         displayAllCards()
-        displayIngredientsTags();
     }
-    displayIngredientsTags();
 });
 
 searchIngredientsInput.addEventListener('input', () => {
     displayIngredientsTags()
 })
 
-
-displayIngredientsTags()
 displayAllCards();
