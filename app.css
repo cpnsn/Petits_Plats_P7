@@ -73,7 +73,7 @@
     color: #7A7A7A;
 }
 
-#ingredients p {
+#ingredients p, #appareils p, #ustensiles p {
     padding: 0.5rem 1rem;
     display: flex;
     justify-content: space-between;
@@ -81,7 +81,38 @@
 
 } 
 
-#ingredients p:hover {
+#ingredients p:hover, #appareils p:hover, #ustensiles p:hover {
     background-color: #FFD15B;
     cursor: pointer;
 } 
+
+.no-recipes {
+    margin-bottom: 12rem;
+}
+
+input[type="search"]::-webkit-search-cancel-button {
+    appearance: none;
+    height: 16px;
+    width: 16px;
+    background-image: url('assets/icons/close_search.svg');
+    background-size: cover;
+    cursor: pointer;
+    border: none;
+}
+
+input[type="search"]::selection {
+    background-color: transparent;
+}
+
+#selected-tags img {
+    margin-left: 1rem;
+}
+
+.selected-tag-div {
+    display: flex;
+    background-color: #FFD15B;
+    cursor: pointer;
+    border-radius: 10px;
+    padding: 1rem;
+    margin-right: 1rem;
+}
