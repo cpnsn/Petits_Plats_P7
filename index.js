@@ -104,7 +104,7 @@ async function createCard(recipe, recipesDiv) {
 const searchInput = document.getElementById('search');
 const searchIngredientsInput = document.getElementById('search-ingredients');
 const ingredients = document.getElementById('ingredients');
-const ingredientTags = document.querySelectorAll('.ingredient-tag');
+// const ingredientTags = document.querySelectorAll('.ingredient-tag');
 const selectedTagsDiv = document.getElementById('selected-tags')
 
 // UPDATE RECIPES COUNT
@@ -164,7 +164,7 @@ function createIngredientTag(ingredient) {
 
     const ingredientTag = document.createElement('p');
     ingredientTag.textContent = capitalizedIngredient;
-    ingredientTag.classList.add('ingredient-tag');
+    // ingredientTag.classList.add('ingredient-tag');
 
     ingredientTag.addEventListener('click', () => {
         const index = selectedIngredients.indexOf(ingredient.toLowerCase());

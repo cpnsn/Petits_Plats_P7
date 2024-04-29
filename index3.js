@@ -172,13 +172,13 @@ let selectedUstensils = [];
 
 
 
-function createTag(tag, tagType) {
+function createTag(tag, type) {
     const capitalizedTag = tag.charAt(0).toUpperCase() + tag.slice(1);
     const tagP = document.createElement('p');
     tagP.textContent = capitalizedTag;
 
-    tagP.addEventListener('click', () => {    
-        if (tagType === 'ingredients') {
+    tagP.addEventListener('click', () => {   
+        if (type === 'ingredients') {
             const index = selectedIngredients.indexOf(tag.toLowerCase());
             if (index === -1) {
                 selectedIngredients.push(tag.toLowerCase());
@@ -186,8 +186,7 @@ function createTag(tag, tagType) {
                 selectedIngredients.splice(index, 1);
             }
         }
-
-        if (tagType === 'appliance') {
+        if (type === 'appliance') {
             const index = selectedAppliances.indexOf(tag.toLowerCase());
             if (index === -1) {
                 selectedAppliances.push(tag.toLowerCase());
@@ -195,8 +194,7 @@ function createTag(tag, tagType) {
                 selectedAppliances.splice(index, 1);
             }
         }
-
-        if (tagType === 'ustensils') {
+        if (type === 'ustensils') {
             const index = selectedUstensils.indexOf(tag.toLowerCase());
             if (index === -1) {
                 selectedUstensils.push(tag.toLowerCase());
@@ -204,6 +202,14 @@ function createTag(tag, tagType) {
                 selectedUstensils.splice(index, 1);
             }
         }
+
+        const indexAllTags = selectedTags.indexOf(tag.toLowerCase());
+        if (indexAllTags === -1) {
+            selectedTags.push(tag.toLowerCase());
+        } else {
+            selectedTags.splice(indexAllTags, 1);
+        }
+        
         displayCardsByTags();
         displayAllTags()   
     });
@@ -249,25 +255,38 @@ async function displayTags(tagType, tagsContainer) {
     }
 
     selectedTags.forEach(selectedTag => {
-        const selectedT = createTag(selectedTag);
+        let currentTagType;
+        if (selectedIngredients.includes(selectedTag.toLowerCase())) {
+            currentTagType = 'ingredients';
+        } else if (selectedAppliances.includes(selectedTag.toLowerCase())) {
+            currentTagType = 'appliance';
+        } else if (selectedUstensils.includes(selectedTag.toLowerCase())) {
+            currentTagType = 'ustensils';
+        }
 
-        tagsContainer.appendChild(selectedT);
-        selectedT.style.backgroundColor = '#FFD15B';
-        uniqueTags.push(selectedTag);
+        const tagP = createTag(selectedTag, currentTagType);
+        if (currentTagType === tagType) {
+            tagsContainer.appendChild(tagP);
+        }
 
-        selectedT.addEventListener('mouseenter', () => {
+        tagP.style.backgroundColor = '#FFD15B';
+        if (!uniqueTags.includes(selectedTag.toLowerCase())) {
+            uniqueTags.push(selectedTag.toLowerCase());
+        }
+
+        tagP.addEventListener('mouseenter', () => {
             const closeIcon = document.createElement('img');
             closeIcon.setAttribute('src', 'assets/icons/close.svg');
-            selectedT.appendChild(closeIcon);
-            selectedT.style.fontWeight = '500';
+            tagP.appendChild(closeIcon);
+            tagP.style.fontWeight = '500';
 
-            selectedT.addEventListener('mouseleave', () => {
-                selectedT.removeChild(closeIcon);
-                selectedT.style.fontWeight = 'normal';
+            tagP.addEventListener('mouseleave', () => {
+                tagP.removeChild(closeIcon);
+                tagP.style.fontWeight = 'normal';
             });
         })
 
-        const selectedTagDiv = createTag(selectedTag);
+        const selectedTagDiv = createTag(selectedTag, tagType);
         selectedTagDiv.classList.add('selected-tag-div')
         selectedTagsDiv.appendChild(selectedTagDiv); 
          
@@ -295,7 +314,6 @@ async function displayTags(tagType, tagsContainer) {
             });
         });
     }
-
     if (tagType === 'appliance') {
         filteredRecipes.forEach(recipe => {
             if ((recipe.appliance.toLowerCase().includes(searchAppareilsInput.value.toLowerCase())) && (!uniqueTags.includes(recipe.appliance.toLowerCase()))) {
@@ -305,7 +323,6 @@ async function displayTags(tagType, tagsContainer) {
             }
         });
     }
-
     if (tagType === 'ustensils') {
         filteredRecipes.forEach(recipe => {
             recipe.ustensils.forEach(ustensil => {
