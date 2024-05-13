@@ -657,10 +657,6 @@ video {
   left: 2.5rem;
 }
 
-.left-\[50\%\] {
-  left: 50%;
-}
-
 .top-0 {
   top: 0px;
 }
@@ -937,11 +933,6 @@ video {
 
 .border-separate {
   border-collapse: separate;
-}
-
-.translate-x-\[-50\%\] {
-  --tw-translate-x: -50%;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
 .\!transform {
