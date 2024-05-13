@@ -75,17 +75,17 @@ async function displayCardsBySearch() {
     const searchInputValue = searchInput.value.toLowerCase();
     let hasRecipes = false;
 
-    recipes.forEach(recipe => {
+    for (let i = 0; i < recipes.length; i++) {
         if (
-            recipe.name.toLowerCase().includes(searchInputValue) ||
-            recipe.description.toLowerCase().includes(searchInputValue) ||
-            recipe.ingredients.some(ingredient => ingredient.ingredient.toLowerCase().includes(searchInputValue))
+            recipes[i].name.toLowerCase().includes(searchInputValue) ||
+            recipes[i].description.toLowerCase().includes(searchInputValue) ||
+            recipes[i].ingredients.some(ingredient => ingredient.ingredient.toLowerCase().includes(searchInputValue))
         ) {
             recipesCount++;
-            createCard(recipe, recipesDiv)
+            createCard(recipes[i], recipesDiv)
             hasRecipes = true;
         }
-    });
+    };
 
     if (!hasRecipes) { 
         const noRecipes = document.createElement('p');
