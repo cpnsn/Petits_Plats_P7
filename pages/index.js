@@ -156,7 +156,7 @@ async function displayTags(tagType, tagsContainer) {
     selectedTagsDiv.innerHTML = '';
     let uniqueTags = [];
 
-
+    // récupération des recettes filtrées selon sélection de tags et recherche
     let filteredRecipes = recipes.filter(recipe =>
         (selectedIngredients.length === 0 || selectedIngredients.every(selectedIngredient =>
             recipe.ingredients.some(ingredient =>
@@ -188,7 +188,6 @@ async function displayTags(tagType, tagsContainer) {
             )
         )
     );
-
     selectedTags.forEach(selectedTag => {
         let currentTagType = null;
         if (selectedIngredients.includes(selectedTag.toLowerCase())) {
@@ -203,12 +202,10 @@ async function displayTags(tagType, tagsContainer) {
         if (currentTagType === tagType) {
             tagsContainer.appendChild(tagP);
         }
-
         tagP.style.backgroundColor = '#FFD15B';
         if (!uniqueTags.includes(selectedTag.toLowerCase())) {
             uniqueTags.push(selectedTag.toLowerCase());
         }
-
         tagP.addEventListener('mouseenter', () => {
             const closeIcon = document.createElement('img');
             closeIcon.setAttribute('src', 'assets/icons/close.svg');
@@ -216,11 +213,14 @@ async function displayTags(tagType, tagsContainer) {
             tagP.style.fontWeight = '500';
 
             tagP.addEventListener('mouseleave', () => {
+                if (tagP.contains(closeIcon)) {
                 tagP.removeChild(closeIcon);
+                }
                 tagP.style.fontWeight = 'normal';
             });
         })
-    
+
+        // affichage et gestion des tags sélectionnés
         const selectedTagDiv = createTag(selectedTag, currentTagType);
         selectedTagDiv.classList.add('selected-tag-div')
         selectedTagsDiv.appendChild(selectedTagDiv); 
@@ -232,16 +232,19 @@ async function displayTags(tagType, tagsContainer) {
             selectedTagDiv.style.fontWeight = '500';
 
             selectedTagDiv.addEventListener('mouseleave', () => {
+                if (selectedTagDiv.contains(closeIcon)) {
                 selectedTagDiv.removeChild(closeIcon);
+                }
                 selectedTagDiv.style.fontWeight = 'normal';
             });
         }) 
     
+        // suppression d'un tag au click
         selectedTagDiv.addEventListener('click', () => {
             const index = selectedTags.indexOf(selectedTag);
             if (index !== -1) {
                 selectedTags.splice(index, 1);
-    
+                
                 let currentTagType = null;
                 if (selectedIngredients.includes(selectedTag.toLowerCase())) {
                     currentTagType = 'ingredients';
@@ -267,13 +270,13 @@ async function displayTags(tagType, tagsContainer) {
                         selectedUstensils.splice(index, 1);
                     }
                 }
-    
                 displayCardsByTags();
                 displayAllTags();
             }
         });
     });
 
+    // affichage des tags disponibles
     if (tagType === 'ingredients') {
         filteredRecipes.forEach(recipe => {
             recipe.ingredients.forEach(ingredient => {
@@ -314,7 +317,7 @@ function displayAllTags() {
 }
 
 
-// RECIPES FILTERED BY INGREDIENTS TAGS
+// RECIPES FILTERED BY TAGS
 async function displayCardsByTags() {
     const recipes = await getRecipes();
     const recipesDiv = document.getElementById('recipes');
