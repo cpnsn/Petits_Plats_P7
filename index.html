@@ -1,86 +1,153 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
+  <head>
     <link href="output.css" rel="stylesheet" type="text/css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto:wght@100&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@200..800&display=swap" rel="stylesheet">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto:wght@100&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@200..800&display=swap"
+      rel="stylesheet"
+    />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Les petits plats</title>
-</head>
-<body>
+  </head>
+  <body>
     <header>
-        <img src="assets/images/header.jpeg" alt="header backgorund image"/>
-        <div class="absolute top-10 left-10 flex">
-            <img class="mr-2" src="assets/logo.svg" alt="logo"/>
-            <img src="assets/icons/icon_logo.svg" alt="icon"/>
-        </div>
-        <div class="absolute top-[20%] lg:top-[30%] flex flex-col w-full">
-            <h1 class="text-yellow font-anton text-3xl lg:text-5xl text-center">CHERCHEZ PARMI PLUS DE 1500 RECETTES <br> DU QUOTIDIEN,SIMPLES ET DÉLICIEUSES</h1>
-            <form class="text-center bg-white mt-8 flex justify-between p-2 lg:p-3 rounded-md w-[94%] mx-auto 2xl:w-[60%]">
-                <input class="w-[94%] outline-none" type="search" id="search" name="search" placeholder="Rechercher une recette, un ingrédient..."/>
-                <button class="bg-black hover:bg-yellow p-2 rounded-md" type="button"><img src="assets/icons/search.svg" alt="icon"/></button>
-            </form>
-        </div>
+      <img src="assets/images/header.jpeg" alt="header backgorund image" />
+      <div class="absolute top-10 left-10 flex">
+        <img class="mr-2" src="assets/logo.svg" alt="logo" />
+        <img src="assets/icons/icon_logo.svg" alt="icon" />
+      </div>
+      <div class="absolute top-[20%] lg:top-[30%] flex flex-col w-full">
+        <h1 class="text-yellow font-anton text-3xl lg:text-5xl text-center">
+          CHERCHEZ PARMI PLUS DE 1500 RECETTES <br />
+          DU QUOTIDIEN,SIMPLES ET DÉLICIEUSES
+        </h1>
+        <form
+          class="text-center bg-white mt-8 flex justify-between p-2 lg:p-3 rounded-md w-[94%] mx-auto 2xl:w-[60%]"
+        >
+          <input
+            class="w-[94%] outline-none"
+            type="search"
+            id="search"
+            name="search"
+            placeholder="Rechercher une recette, un ingrédient..."
+          />
+          <button class="bg-black hover:bg-yellow p-2 rounded-md" type="button">
+            <img src="assets/icons/search.svg" alt="icon" />
+          </button>
+        </form>
+      </div>
     </header>
     <main class="bg-main-bg">
-        <div class="container flex justify-between items-center mx-auto">
-            <div class="flex py-6 px-12">
-
-                <button id="ingredients-btn" class="p-4 bg-white rounded-[11px] flex items-center justify-between mr-12 h-fit w-[210px]">
-                    Ingrédients
-                    <img class="ml-12" src="assets/icons/arrow_down.svg" alt="icon"/>
-                </button>
-                <div id="ingredients-dropdown" class="w-[210px] bg-white mr-12 rounded-[11px] hidden absolute z-[1]">
-                    <button id="ingredients-dropdown-btn" class="flex items-center justify-between w-full pt-4 px-4">
-                        Ingrédients
-                        <img class="ml-12" src="assets/icons/arrow_up.svg" alt="icon"/>
-                    </button>
-                        <input class="outline-none border border-[#C6C6C6] rounded-[2px] mt-3 mb-4 mx-4" type="search" id="search-ingredients" name="search-ingredients"/>
-                    <div class="h-[200px] overflow-scroll" id="ingredients"></div>
-                </div>
-
-                <div class="relative">
-                    <button id="appareils-btn" class="p-4 bg-white rounded-[11px] flex items-center justify-between mr-12 h-fit w-[210px]">
-                        Appareils
-                        <img class="ml-12" src="assets/icons/arrow_down.svg" alt="icon"/>
-                    </button>
-                    <div id="appareils-dropdown" class="w-[210px] bg-white mr-12 rounded-[11px] hidden absolute top-0 z-[1]">
-                        <button id="appareils-dropdown-btn" class="flex items-center justify-between w-full pt-4 px-4">
-                            Appareils
-                            <img class="ml-12" src="assets/icons/arrow_up.svg" alt="icon"/>
-                        </button>
-                            <input class="outline-none border border-[#C6C6C6] rounded-[2px] mt-3 mb-4 mx-4" type="search" id="search-appareils" name="search-appareils"/>
-                        <div class="h-[200px] overflow-scroll" id="appareils"></div>
-                    </div>
-                </div>
-
-                <div class="relative">
-                    <button id="ustensiles-btn" class="p-4 bg-white rounded-[11px] flex items-center justify-between mr-12 h-fit w-[210px]">
-                        Ustensiles
-                        <img class="ml-12" src="assets/icons/arrow_down.svg" alt="icon"/>
-                    </button>
-                    <div id="ustensiles-dropdown" class="w-[210px] bg-white mr-12 rounded-[11px] hidden absolute top-0 z-[1]">
-                        <button id="ustensiles-dropdown-btn" class="flex items-center justify-between w-full pt-4 px-4">
-                            Ustensiles
-                            <img class="ml-12" src="assets/icons/arrow_up.svg" alt="icon"/>
-                        </button>
-                            <input class="outline-none border border-[#C6C6C6] rounded-[2px] mt-3 mb-4 mx-4" type="search" id="search-ustensiles" name="search-ustensiles"/>
-                        <div class="h-[200px] overflow-scroll" id="ustensiles"></div>
-                    </div>
-                </div>
-
+      <div class="container flex justify-between items-center mx-auto">
+        <div class="flex py-6 px-12">
+          <button
+            id="ingredients-btn"
+            class="p-4 bg-white rounded-[11px] flex items-center justify-between mr-12 h-fit w-[210px]"
+          >
+            Ingrédients
+            <img class="ml-12" src="assets/icons/arrow_down.svg" alt="icon" />
+          </button>
+          <div
+            id="ingredients-dropdown"
+            class="w-[210px] bg-white mr-12 rounded-[11px] hidden absolute z-[1]"
+          >
+            <button
+              id="ingredients-dropdown-btn"
+              class="flex items-center justify-between w-full pt-4 px-4"
+            >
+              Ingrédients
+              <img class="ml-12" src="assets/icons/arrow_up.svg" alt="icon" />
+            </button>
+            <div class="relative border border-[#C6C6C6] rounded-[2px] mt-3 mb-4 mx-4 w-[80%]">
+              <input
+                class="outline-none w-[80%]"
+                type="search"
+                id="search-ingredients"
+                name="search-ingredients"
+              />
+              <img class="absolute right-3 top-0 bottom-0 my-auto" src="assets/icons/search2.svg" alt="icon" />
             </div>
+            <div class="h-[200px] overflow-scroll" id="ingredients"></div>
+          </div>
 
+          <div class="relative">
+            <button
+              id="appareils-btn"
+              class="p-4 bg-white rounded-[11px] flex items-center justify-between mr-12 h-fit w-[210px]"
+            >
+              Appareils
+              <img class="ml-12" src="assets/icons/arrow_down.svg" alt="icon" />
+            </button>
+            <div
+              id="appareils-dropdown"
+              class="w-[210px] bg-white mr-12 rounded-[11px] hidden absolute top-0 z-[1]"
+            >
+              <button
+                id="appareils-dropdown-btn"
+                class="flex items-center justify-between w-full pt-4 px-4"
+              >
+                Appareils
+                <img class="ml-12" src="assets/icons/arrow_up.svg" alt="icon" />
+              </button>
+              <div class="relative border border-[#C6C6C6] rounded-[2px] mt-3 mb-4 mx-4 w-[80%]">
+                <input
+                  class="outline-none w-[80%]"
+                  type="search"
+                  id="search-appareils"
+                  name="search-appareils"
+                />
+                <img class="absolute right-3 top-0 bottom-0 my-auto" src="assets/icons/search2.svg" alt="icon" />
+              </div>
+              <div class="h-[200px] overflow-scroll" id="appareils"></div>
+            </div>
+          </div>
+
+          <div class="relative">
+            <button
+              id="ustensiles-btn"
+              class="p-4 bg-white rounded-[11px] flex items-center justify-between mr-12 h-fit w-[210px]"
+            >
+              Ustensiles
+              <img class="ml-12" src="assets/icons/arrow_down.svg" alt="icon" />
+            </button>
+            <div
+              id="ustensiles-dropdown"
+              class="w-[210px] bg-white mr-12 rounded-[11px] hidden absolute top-0 z-[1]"
+            >
+              <button
+                id="ustensiles-dropdown-btn"
+                class="flex items-center justify-between w-full pt-4 px-4"
+              >
+                Ustensiles
+                <img class="ml-12" src="assets/icons/arrow_up.svg" alt="icon" />
+              </button>
+              <div class="relative border border-[#C6C6C6] rounded-[2px] mt-3 mb-4 mx-4 w-[80%]">
+                <input
+                  class="outline-none w-[80%]"
+                  type="search"
+                  id="search-ustensiles"
+                  name="search-ustensiles"
+                />
+                <img class="absolute right-3 top-0 bottom-0 my-auto" src="assets/icons/search2.svg" alt="icon" />
+            </div>
+              <div class="h-[200px] overflow-scroll" id="ustensiles"></div>
+            </div>
+          </div>
         </div>
-        
-        <div id="selected-tags" class="flex mx-auto container px-12"></div>
-        
-        <div class="flex flex-wrap justify-center" id="recipes"></div>
+      </div>
+
+      <div id="selected-tags" class="flex mx-auto container px-12"></div>
+
+      <div class="flex flex-wrap justify-center" id="recipes"></div>
     </main>
-<script src="pages/index.js"></script>  
-<script src="templates/recipeCard.js"></script>  
-</body>
+    <script src="pages/index.js"></script>
+    <script src="templates/recipeCard.js"></script>
+  </body>
 </html>
