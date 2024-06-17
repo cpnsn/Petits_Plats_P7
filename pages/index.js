@@ -216,7 +216,9 @@ async function displayTags(tagType, tagsContainer) {
             tagP.style.fontWeight = '500';
 
             tagP.addEventListener('mouseleave', () => {
-                tagP.removeChild(closeIcon);
+                if (tagP.contains(closeIcon)) {
+                    tagP.removeChild(closeIcon);
+                }
                 tagP.style.fontWeight = 'normal';
             });
         })
@@ -232,7 +234,9 @@ async function displayTags(tagType, tagsContainer) {
             selectedTagDiv.style.fontWeight = '500';
 
             selectedTagDiv.addEventListener('mouseleave', () => {
-                selectedTagDiv.removeChild(closeIcon);
+                if (selectedTagDiv.contains(closeIcon)) {
+                    selectedTagDiv.removeChild(closeIcon);
+                }
                 selectedTagDiv.style.fontWeight = 'normal';
             });
         }) 
