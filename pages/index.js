@@ -127,9 +127,9 @@ async function displayCardsBySearchAndTags() {
       return matchesSearch && matchesTags;
     });
 
-    for (let i = 0; i < recipes.length; i++) {
+    for (let i = 0; i < filteredRecipes.length; i++) {
       recipesCount++;
-      createCard(recipes[i], recipesDiv);
+      createCard(filteredRecipes[i], recipesDiv);
     };
 
     if (recipesCount === 0) {
