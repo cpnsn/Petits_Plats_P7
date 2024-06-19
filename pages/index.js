@@ -9,6 +9,9 @@ async function getRecipes() {
   }
 }
 
+const noRecipes = document.createElement('p');
+noRecipes.classList.add('no-recipes');
+
 // RECIPES COUNT PARAGRAPH
 const recipesCountP = document.createElement('p');
 recipesCountP.classList.add('recipes-count');
@@ -61,6 +64,37 @@ async function displayAllCards() {
   displayAllTags();
 }
 
+async function displayCardsBySearch() {
+  const recipes = await getRecipes();
+  const recipesDiv = document.getElementById("recipes");
+  recipesDiv.innerHTML = "";
+  let recipesCount = 0;
+  const searchInputValue = searchInput.value.toLowerCase();
+  let hasRecipes = false;
+
+  recipes.forEach((recipe) => {
+    if (
+      recipe.name.toLowerCase().includes(searchInputValue) ||
+      recipe.description.toLowerCase().includes(searchInputValue) ||
+      recipe.ingredients.some((ingredient) =>
+        ingredient.ingredient.toLowerCase().includes(searchInputValue)
+      )
+    ) {
+      recipesCount++;
+      createCard(recipe, recipesDiv);
+      hasRecipes = true;
+    }
+  });
+
+  if (!hasRecipes) {
+    noRecipes.textContent = `Aucune recette ne contient "${searchInputValue}", vous pouvez chercher "tarte aux pommes", "poisson", etc.`;
+    recipesDiv.appendChild(noRecipes);
+  }
+
+  updateRecipesCount(recipesCount);
+  displayAllTags();
+}
+
 // RECIPES FILTERED BY SEARCH AND TAGS
 async function displayCardsBySearchAndTags() {
     const recipes = await getRecipes();
@@ -101,8 +135,6 @@ async function displayCardsBySearchAndTags() {
     });
 
     if (recipesCount === 0) {
-      const noRecipes = document.createElement('p');
-      noRecipes.classList.add('no-recipes');
       noRecipes.textContent = `Aucune recette ne contient "${searchInputValue}", vous pouvez chercher "tarte aux pommes", "poisson", etc.`;
       recipesDiv.appendChild(noRecipes);
     }
@@ -283,10 +315,17 @@ async function displayAllTags() {
 
 // DISPLAY SEARCH RESULTS
 searchInput.addEventListener('input', () => {
-  if (searchInput.value.toLowerCase().length >= 3) {
+  const searchValue = searchInput.value.toLowerCase();
+  if (searchValue.length >= 3 && selectedTags.length > 0) {
     displayCardsBySearchAndTags();
-  } else {
-    displayCardsBySearchAndTags()
+  } else if (searchValue.length >= 3) {
+    displayCardsBySearch();
+  } else if (searchValue === '') {
+    if (selectedTags.length > 0) {
+      displayCardsBySearchAndTags();
+    } else {
+      displayAllCards();
+    }
   }
 });
 
