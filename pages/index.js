@@ -63,52 +63,52 @@ async function displayAllCards() {
 
 // RECIPES FILTERED BY SEARCH AND TAGS
 async function displayCardsBySearchAndTags() {
-  const recipes = await getRecipes();
-  const recipesDiv = document.getElementById('recipes');
-  recipesDiv.innerHTML = '';
-  let recipesCount = 0;
-  const searchInputValue = searchInput.value.toLowerCase();
+    const recipes = await getRecipes();
+    const recipesDiv = document.getElementById('recipes');
+    recipesDiv.innerHTML = '';
+    let recipesCount = 0;
+    const searchInputValue = searchInput.value.toLowerCase();
 
-  const filteredRecipes = recipes.filter((recipe) => {
-    const matchesSearch =
-      searchInputValue === '' ||
-      recipe.name.toLowerCase().includes(searchInputValue) ||
-      recipe.description.toLowerCase().includes(searchInputValue) ||
-      recipe.ingredients.some((ingredient) =>
-        ingredient.ingredient.toLowerCase().includes(searchInputValue)
-      );
-
-    const matchesTags =
-      selectedIngredients.every((selectedIngredient) =>
+    const filteredRecipes = recipes.filter((recipe) => {
+      const matchesSearch =
+        searchInputValue === '' ||
+        recipe.name.toLowerCase().includes(searchInputValue) ||
+        recipe.description.toLowerCase().includes(searchInputValue) ||
         recipe.ingredients.some((ingredient) =>
-            ingredient.ingredient.toLowerCase() === selectedIngredient
-        )
-      ) &&
-      selectedAppliances.every((selectedAppliance) =>
-          recipe.appliance.toLowerCase() === selectedAppliance
-      ) &&
-      selectedUstensils.every((selectedUstensil) =>
-        recipe.ustensils.some((ustensil) => ustensil.toLowerCase() === selectedUstensil
-        )
-      );
+          ingredient.ingredient.toLowerCase().includes(searchInputValue)
+        );
 
-    return matchesSearch && matchesTags;
-  });
+        const matchesTags =
+        selectedIngredients.every((selectedIngredient) =>
+          recipe.ingredients.some((ingredient) =>
+              ingredient.ingredient.toLowerCase() === selectedIngredient
+          )
+        ) &&
+        selectedAppliances.every((selectedAppliance) =>
+            recipe.appliance.toLowerCase() === selectedAppliance
+        ) &&
+        selectedUstensils.every((selectedUstensil) =>
+          recipe.ustensils.some((ustensil) => ustensil.toLowerCase() === selectedUstensil
+          )
+        );
+  
+      return matchesSearch && matchesTags;
+    });
 
-  filteredRecipes.forEach((recipe) => {
-    recipesCount++;
-    createCard(recipe, recipesDiv);
-  });
+    filteredRecipes.forEach((recipe) => {
+      recipesCount++;
+      createCard(recipe, recipesDiv);
+    });
 
-  if (recipesCount === 0) {
-    const noRecipes = document.createElement('p');
-    noRecipes.classList.add('no-recipes');
-    noRecipes.textContent = `Aucune recette ne contient "${searchInputValue}", vous pouvez chercher "tarte aux pommes", "poisson", etc.`;
-    recipesDiv.appendChild(noRecipes);
-  }
+    if (recipesCount === 0) {
+      const noRecipes = document.createElement('p');
+      noRecipes.classList.add('no-recipes');
+      noRecipes.textContent = `Aucune recette ne contient "${searchInputValue}", vous pouvez chercher "tarte aux pommes", "poisson", etc.`;
+      recipesDiv.appendChild(noRecipes);
+    }
 
-  updateRecipesCount(recipesCount);
-  displayAllTags();
+    updateRecipesCount(recipesCount);
+    displayAllTags();
 }
 
 let selectedTags = [];
@@ -236,38 +236,43 @@ async function displayTags(tagType, tagsContainer) {
 
   // gestion et affichage des tags
   filteredRecipes.forEach(recipe => {
-    if (tagType === 'ingredients') {
-      recipe.ingredients.forEach(ingredient => {
-        const tag = ingredient.ingredient.toLowerCase();
-        if (!uniqueTags.includes(tag)) {
-          uniqueTags.push(tag);
-          const tagP = createTag(tag);
-          tagP.addEventListener('click', () => handleTagClick(tag, 'ingredients'))
+    switch (tagType) {
+      case 'ingredients':
+        recipe.ingredients.forEach(ingredient => {
+          const tag = ingredient.ingredient.toLowerCase();
+          if (tag.includes(searchIngredientsInput.value.toLowerCase()) && !uniqueTags.includes(tag)) {
+            uniqueTags.push(tag);
+            const tagP = createTag(tag);
+            tagP.addEventListener('click', () => handleTagClick(tag, 'ingredients'));
+            tagsContainer.appendChild(tagP);
+          }
+        });
+        break;
+      case 'appliance':
+        const applianceTag = recipe.appliance.toLowerCase();
+        if (applianceTag.includes(searchAppareilsInput.value.toLowerCase()) && !uniqueTags.includes(applianceTag)) {
+          uniqueTags.push(applianceTag);
+          const tagP = createTag(applianceTag);
+          tagP.addEventListener('click', () => handleTagClick(applianceTag, 'appliance'));
           tagsContainer.appendChild(tagP);
         }
-      });
+        break;
+      case 'ustensils':
+        recipe.ustensils.forEach(ustensil => {
+          const tag = ustensil.toLowerCase();
+          if (tag.includes(searchUstensilesInput.value.toLowerCase()) && !uniqueTags.includes(tag)) {
+            uniqueTags.push(tag);
+            const tagP = createTag(tag);
+            tagP.addEventListener('click', () => handleTagClick(tag, 'ustensils'));
+            tagsContainer.appendChild(tagP);
+          }
+        });
+        break;
+      default:
+        console.error('Unknown tag type:', tagType);
+        break;
     }
-    if (tagType === 'appliance') {
-      const tag = recipe.appliance.toLowerCase();
-      if (!uniqueTags.includes(tag)) {
-        uniqueTags.push(tag);
-        const tagP = createTag(tag);
-        tagP.addEventListener('click', () => handleTagClick(tag, 'appliance'))
-        tagsContainer.appendChild(tagP);
-      }
-    }
-    if (tagType === 'ustensils') {
-      recipe.ustensils.forEach((ustensil) => {
-        const tag = ustensil.toLowerCase();
-        if (!uniqueTags.includes(tag)) {
-          uniqueTags.push(tag);
-          const tagP = createTag(tag);
-          tagP.addEventListener('click', () => handleTagClick(tag, 'ustensils'))
-          tagsContainer.appendChild(tagP);
-        }
-      });
-    }
-  });
+  })
 }
 
 async function displayAllTags() {
@@ -281,7 +286,7 @@ searchInput.addEventListener('input', () => {
   if (searchInput.value.toLowerCase().length >= 3) {
     displayCardsBySearchAndTags();
   } else {
-    displayAllCards()
+    displayCardsBySearchAndTags()
   }
 });
 
