@@ -74,15 +74,15 @@ async function displayCardsBySearch() {
 
   for (let i = 0; i < recipes.length; i++) {
     if (
-        recipes[i].name.toLowerCase().includes(searchInputValue) ||
-        recipes[i].description.toLowerCase().includes(searchInputValue) ||
-        recipes[i].ingredients.some(ingredient => ingredient.ingredient.toLowerCase().includes(searchInputValue))
+      recipes[i].name.toLowerCase().includes(searchInputValue) ||
+      recipes[i].description.toLowerCase().includes(searchInputValue) ||
+      recipes[i].ingredients.some(ingredient => ingredient.ingredient.toLowerCase().includes(searchInputValue))
     ) {
         recipesCount++;
         createCard(recipes[i], recipesDiv)
         hasRecipes = true;
-    }
-};
+      }
+  };
 
   if (!hasRecipes) {
     noRecipes.textContent = `Aucune recette ne contient "${searchInputValue}", vous pouvez chercher "tarte aux pommes", "poisson", etc.`;
@@ -93,6 +93,33 @@ async function displayCardsBySearch() {
   displayAllTags();
 }
 
+function filterRecipesBySearchAndTags(recipes, searchInputValue) {
+  return recipes.filter((recipe) => {
+    const matchesSearch =
+      recipe.name.toLowerCase().includes(searchInputValue) ||
+      recipe.description.toLowerCase().includes(searchInputValue) ||
+      recipe.ingredients.some((ingredient) =>
+        ingredient.ingredient.toLowerCase().includes(searchInputValue)
+      );
+
+      const matchesTags =
+      selectedIngredients.every((selectedIngredient) =>
+        recipe.ingredients.some((ingredient) =>
+          ingredient.ingredient.toLowerCase() === selectedIngredient
+        )
+      ) &&
+      selectedAppliances.every((selectedAppliance) =>
+        recipe.appliance.toLowerCase() === selectedAppliance
+      ) &&
+      selectedUstensils.every((selectedUstensil) =>
+        recipe.ustensils.some((ustensil) => ustensil.toLowerCase() === selectedUstensil
+        )
+      );
+
+    return matchesSearch && matchesTags;
+  });
+}
+
 // RECIPES FILTERED BY SEARCH AND TAGS
 async function displayCardsBySearchAndTags() {
     const recipes = await getRecipes();
@@ -101,36 +128,12 @@ async function displayCardsBySearchAndTags() {
     let recipesCount = 0;
     const searchInputValue = searchInput.value.toLowerCase();
 
-    const filteredRecipes = recipes.filter((recipe) => {
-      const matchesSearch =
-        searchInputValue === '' ||
-        recipe.name.toLowerCase().includes(searchInputValue) ||
-        recipe.description.toLowerCase().includes(searchInputValue) ||
-        recipe.ingredients.some((ingredient) =>
-          ingredient.ingredient.toLowerCase().includes(searchInputValue)
-        );
+    const filteredRecipes = filterRecipesBySearchAndTags(recipes, searchInputValue);
 
-        const matchesTags =
-        selectedIngredients.every((selectedIngredient) =>
-          recipe.ingredients.some((ingredient) =>
-              ingredient.ingredient.toLowerCase() === selectedIngredient
-          )
-        ) &&
-        selectedAppliances.every((selectedAppliance) =>
-            recipe.appliance.toLowerCase() === selectedAppliance
-        ) &&
-        selectedUstensils.every((selectedUstensil) =>
-          recipe.ustensils.some((ustensil) => ustensil.toLowerCase() === selectedUstensil
-          )
-        );
-  
-      return matchesSearch && matchesTags;
-    });
-
-    for (let i = 0; i < filteredRecipes.length; i++) {
+    filteredRecipes.forEach((recipe) => {
       recipesCount++;
-      createCard(filteredRecipes[i], recipesDiv);
-    };
+      createCard(recipe, recipesDiv);
+    });
 
     if (recipesCount === 0) {
       noRecipes.textContent = `Aucune recette ne contient "${searchInputValue}", vous pouvez chercher "tarte aux pommes", "poisson", etc.`;
@@ -206,38 +209,10 @@ async function displayTags(tagType, tagsContainer) {
   selectedTagsDiv.innerHTML = '';
   let uniqueTags = [];
 
-  // récupération des recettes filtrées selon sélection de tags et recherche
-  let filteredRecipes = recipes.filter(recipe =>
-      (selectedIngredients.length === 0 || selectedIngredients.every(selectedIngredient =>
-          recipe.ingredients.some(ingredient =>
-              ingredient.ingredient.toLowerCase() === selectedIngredient
-          )
-        )) &&
-      (selectedAppliances.length === 0 || selectedAppliances.some(selectedAppliance =>
-            recipe.appliance.toLowerCase() === selectedAppliance
-        )) &&
-      (selectedUstensils.length === 0 || selectedUstensils.some(selectedUstensil =>
-          recipe.ustensils.some(ustensil => ustensil.toLowerCase() === selectedUstensil
-          )
-        )) &&
-      (selectedTags.length === 0 || selectedTags.every(selectedTag =>
-            recipe.ingredients.some(ingredient =>
-                ingredient.ingredient.toLowerCase() === selectedTag
-            ) ||
-            recipe.appliance.toLowerCase() === selectedTag ||
-            recipe.ustensils.some(ustensil => ustensil.toLowerCase() === selectedTag
-            )
-        )) &&
-      (searchInputValue === '' ||
-        recipe.name.toLowerCase().includes(searchInputValue) ||
-        recipe.description.toLowerCase().includes(searchInputValue) ||
-        recipe.ingredients.some(ingredient =>
-          ingredient.ingredient.toLowerCase().includes(searchInputValue)
-        ))
-  );
+  const filteredRecipes = filterRecipesBySearchAndTags(recipes, searchInputValue);
 
   selectedTags.forEach(selectedTag => {
-    let currentTagType = null;
+    let currentTagType = '';
     if (selectedIngredients.includes(selectedTag.toLowerCase())) {
       currentTagType = 'ingredients';
     } else if (selectedAppliances.includes(selectedTag.toLowerCase())) {
@@ -247,7 +222,7 @@ async function displayTags(tagType, tagsContainer) {
     }
 
     const tagP = createTag(selectedTag);
-    tagP.addEventListener('click', () => handleTagClick(selectedTag, tagType));
+    tagP.addEventListener('click', () => handleTagClick(selectedTag, currentTagType));
     if (currentTagType === tagType) {
       tagsContainer.appendChild(tagP);
     }
@@ -258,7 +233,7 @@ async function displayTags(tagType, tagsContainer) {
     addCloseIcon(tagP);
 
     const selectedTagDiv = createTag(selectedTag);
-    selectedTagDiv.addEventListener('click', () => handleTagClick(selectedTag, tagType))
+    selectedTagDiv.addEventListener('click', () => handleTagClick(selectedTag, currentTagType));
     selectedTagDiv.classList.add('selected-tag-div');
     selectedTagsDiv.appendChild(selectedTagDiv);
     addCloseIcon(selectedTagDiv);
@@ -279,11 +254,11 @@ async function displayTags(tagType, tagsContainer) {
         });
         break;
       case 'appliance':
-        const applianceTag = recipe.appliance.toLowerCase();
-        if (applianceTag.includes(searchAppareilsInput.value.toLowerCase()) && !uniqueTags.includes(applianceTag)) {
-          uniqueTags.push(applianceTag);
-          const tagP = createTag(applianceTag);
-          tagP.addEventListener('click', () => handleTagClick(applianceTag, 'appliance'));
+        const tag = recipe.appliance.toLowerCase();
+        if (tag.includes(searchAppareilsInput.value.toLowerCase()) && !uniqueTags.includes(tag)) {
+          uniqueTags.push(tag);
+          const tagP = createTag(tag);
+          tagP.addEventListener('click', () => handleTagClick(tag, 'appliance'));
           tagsContainer.appendChild(tagP);
         }
         break;
@@ -338,19 +313,6 @@ searchAppareilsInput.addEventListener('input', () => {
 
 searchUstensilesInput.addEventListener('input', () => {
   displayTags('ustensils', ustensilesTagsContainer);
-});
-
-// REMOVE SELECTED TAG
-selectedTagsDiv.addEventListener('click', (event) => {
-  const tagToRemove = event.target.textContent.toLowerCase();
-  selectedTags = selectedTags.filter((tag) => tag !== tagToRemove);
-  selectedIngredients = selectedIngredients.filter(
-    (tag) => tag !== tagToRemove
-  );
-  selectedAppliances = selectedAppliances.filter((tag) => tag !== tagToRemove);
-  selectedUstensils = selectedUstensils.filter((tag) => tag !== tagToRemove);
-  displayCardsBySearchAndTags();
-  displayAllTags();
 });
 
 displayAllCards();
